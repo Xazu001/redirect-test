@@ -7,7 +7,7 @@ const app = new Hono();
 
 const { injectWebSocket, upgradeWebSocket } = createNodeWebSocket({ app });
 
-const adresKacpra = "25.17.43.102";
+const adresKacpra = "25.17.43.102:80";
 const ws = new WebSocket(`ws://${adresKacpra}/ws`);
 
 app.get(
@@ -29,7 +29,9 @@ app.get(
 const port = 5173;
 console.log(`Server is running on port ${port}`);
 
-serve({
+const server = serve({
   fetch: app.fetch,
   port,
 });
+
+injectWebSocket(server);
