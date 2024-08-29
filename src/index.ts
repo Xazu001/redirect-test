@@ -8,14 +8,14 @@ const app = new Hono();
 const { injectWebSocket, upgradeWebSocket } = createNodeWebSocket({ app });
 
 const adresKacpra = "25.17.43.102:80";
-const ws = new WebSocket(`ws://${adresKacpra}/ws`);
+const wsServer = new WebSocket(`ws://${adresKacpra}/ws`);
 
 app.get(
   "/redirect",
   upgradeWebSocket((c) => {
-    ws.send("Hello from server!");
     return {
       onMessage(event, ws) {
+        wsServer.send("Hello from Mateusz:" + event.data);
         console.log(`Message from client: ${event.data}`);
         ws.send("Hello from server!");
       },
