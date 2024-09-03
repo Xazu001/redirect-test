@@ -9,7 +9,7 @@ const { injectWebSocket, upgradeWebSocket } = createNodeWebSocket({ app });
 
 const adresKacpra = "25.17.43.102:80";
 // const adresKacpra = "localhost:80";
-const wsServer = new WebSocket(`ws://${adresKacpra}/ws`);
+const wsServer = new WebSocket(`ws://${adresKacpra}/api/updateInfo/1`);
 
 app.get(
   "/redirect",
@@ -17,8 +17,11 @@ app.get(
     return {
       onMessage(event, ws) {
         wsServer.send(event.data);
-        console.log(`Message from client: ${event.data}`);
-        ws.send("Hello from server!");
+        wsServer.on("message", (data) => {
+          const message = data.toString();
+
+          ws.send(message);
+        });
       },
       onClose: () => {
         console.log("Connection closed");
